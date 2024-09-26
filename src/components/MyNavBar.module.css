@@ -1,0 +1,35 @@
+.Logo{
+    font-size: 60px;
+    text-align: left;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: white;
+    
+}
+
+
+.barra{
+    height: 90px;
+    font-size:larger;
+}
+
+.Nav{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.links{
+    color: white;
+    margin: 60px;
+    font-size: 30px;
+}
+
+.links:hover{
+    color: honeydew;
+    background-color: darkblue;
+    border-radius: 60px;
+}
+
+.Logo:hover{
+    color: white;
+    transform: scale(1.5);
+}
