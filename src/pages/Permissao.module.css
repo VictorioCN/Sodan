@@ -1,0 +1,39 @@
+.container{
+    background-color: rgb(218, 224, 225);
+    border-radius: 7%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.div{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.input{
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2%;
+    border-radius: 10px;
+}
+
+.Label{
+    color: blue;
+}
+
+button{
+    margin-top: 20px;
+    margin-bottom: 15px;
+    border-radius: 40%;
+}
+h1{
+    color: blue;
+}
