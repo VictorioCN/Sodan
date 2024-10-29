@@ -25,6 +25,8 @@ const MyLogin = () => {
       <Button className={style.btn} variant="primary" type="submit">
         Entrar
       </Button>
+      <br />
+      <a href="">Esqueci a senha</a>
     </Form>
     </Container>
     <div>
