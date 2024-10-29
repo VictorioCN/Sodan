@@ -16,7 +16,7 @@ const MyNavBar = () => {
             <Nav.Link href="/Permissao" className={style.links}>Permissão</Nav.Link>
             <Nav.Link href="/empregado" className={style.links}>Empregado</Nav.Link>
             <Nav.Link href="/buscar" className={style.links}>Buscar</Nav.Link>
-            <Nav.Link href="/sair" className={style.logoSair}>Sair</Nav.Link>
+            <Nav.Link href="/" className={style.linksSair}>Sair</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
