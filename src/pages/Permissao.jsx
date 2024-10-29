@@ -11,29 +11,29 @@ const Permissao = () => {
       <Container className={style.container}>
   <Form className={style.form}>
     <h1>Permissões do Gerente</h1>
-      <Form.Group className={style.input} controlId="formBasicID">
-        <Form.Label className={style.Label}>N° Matricula*</Form.Label>
-        <Form.Control type="text"/>
+    <Form.Group className="mb-3" controlId="formBasicMatricula">
+        <Form.Label className={style.label}>N° Matrícula*</Form.Label>
+        <Form.Control className={style.input} type="number"/>
       </Form.Group>
 
-      <Form.Group className={style.input} controlId="formBasicNome">
-        <Form.Label className={style.Label}>Nome completo*</Form.Label>
-        <Form.Control type="text"/>
+      <Form.Group className="mb-3" controlId="formBasicNome">
+        <Form.Label className={style.label}>Nome Completo*</Form.Label>
+        <Form.Control className={style.input} type="text"/>
       </Form.Group>
 
-      <Form.Group className={style.input} controlId="formBasicCPF">
-        <Form.Label className={style.Label}>CPF*</Form.Label>
-        <Form.Control type="text"/>
+      <Form.Group className="mb-3" controlId="formBasicCPF">
+        <Form.Label className={style.label}>CPF*</Form.Label>
+        <Form.Control className={style.input} type="text"/>
       </Form.Group>
 
-      <Form.Group className={style.input} controlId="formBasicUsuario">
-        <Form.Label className={style.Label}>Nome de Usuário</Form.Label>
-        <Form.Control type="text"/>
+      <Form.Group className="mb-3" controlId="formBasicNomeUsuario">
+        <Form.Label className={style.label}>Nome de Usuário</Form.Label>
+        <Form.Control className={style.input} type="text"/>
       </Form.Group>
 
-      <Form.Group className={style.input} controlId="formBasicSenha">
-        <Form.Label className={style.Label}>Senha</Form.Label>
-        <Form.Control type="password"/>
+      <Form.Group className="mb-3" controlId="formBasicSenha">
+        <Form.Label className={style.label}>Senha</Form.Label>
+        <Form.Control className={style.input} type="password"/>
       </Form.Group>
       <br />
       <label className={style.Label_permissao}>Permissão</label>

@@ -20,15 +20,14 @@
 }
 
 .input{
-    color: blue;
-    width: 700px;
+    width: 500px;
+    border-color: rgb(13, 37, 246);
+    border-radius: 100px;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 2%;
-    border-radius: 30px;
 }
 
-.Label{
+.label{
     color: blue;
     font: bold;
     font-size: 25px;
@@ -41,6 +40,7 @@
     margin-left: 30px;
     font-size: 24px;
     font: bold;
+    margin-top: 30px;
 }
 h1{
     color: blue;
