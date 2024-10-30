@@ -29,8 +29,8 @@ const Home = () => {
             <Card.Body>
               <Card.Title className={style.titulo}>Nossa História</Card.Title>
               <Card.Text className={style.texto}>
-                Fundada em 2024, nossa empresa nasceu com o objetivo de mostrar se as pessoas são aptas á realizarem suas funções
-                . Ao longo desse ano, expandimos nossos
+                Fundada em 2024, nossa empresa nasceu com o objetivo de mostrar se as pessoas são aptas á realizarem suas funções.
+                 Ao longo desse ano, expandimos nossos
                 serviços e, hoje, somos referência em consulta de status de treinamento. 
                 Estamos comprometidos em oferecer as melhores experiências
                 de aprendizado.
