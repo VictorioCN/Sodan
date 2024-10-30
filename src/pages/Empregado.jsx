@@ -96,7 +96,7 @@ const Empregado = () => {
               <h2>Treinamentos Disponíveis</h2>
 
               <div className="mb-3">
-                <h5>Treinamento de Operação de Máquinas e Equipamentos</h5>
+                <h5 className={style.nomeTreinamento}>Treinamento de Operação de Máquinas e Equipamentos</h5>
                 <Form.Check
                   type="radio"
                   label="Pendente"
@@ -118,7 +118,7 @@ const Empregado = () => {
               </div>
                 <hr/>
               <div className="mb-3">
-                <h5>Treinamento de Segurança no Trabalho</h5>
+                <h5 className={style.nomeTreinamento}>Treinamento de Segurança no Trabalho</h5>
                 <Form.Check
                   type="radio"
                   label="Pendente"
@@ -140,7 +140,7 @@ const Empregado = () => {
               </div>
                 <hr/>
               <div className="mb-3">
-                <h5>Treinamento de Gestão de Recursos Naturais</h5>
+                <h5 className={style.nomeTreinamento}>Treinamento de Gestão de Recursos Naturais</h5>
                 <Form.Check
                   type="radio"
                   label="Pendente"
@@ -162,7 +162,7 @@ const Empregado = () => {
               </div>
                 <hr/>
               <div className="mb-3">
-                <h5>Treinamento de Segurança no Trabalho</h5>
+                <h5 className={style.nomeTreinamento}>Treinamento de Segurança no Trabalho</h5>
                 <Form.Check
                   type="radio"
                   label="Pendente"

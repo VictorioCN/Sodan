@@ -29,14 +29,19 @@
   }
   
   .input {
-    margin-top: 0.5rem; /* Espaço acima dos campos de input */
+    margin: auto;
+    border-color: rgb(13, 37, 246);
+    border-radius: 100px;
+    margin-left: auto;
+    margin-right: auto;
+
   }
   
   .btn_cadastrar {
     width: auto; /* Mantém a largura automática para os botões */
   }
   
-  h5{
+  .nomeTreinamento{
     color: blue;
   }
 
