@@ -8,7 +8,7 @@ const MyNavBar = () => {
   return (
     <div>
         <>
-      <Navbar className={style.barra} fixed="top"  bg="primary">
+      <Navbar className={style.barra} bg="primary">
         <Container>
           <Navbar.Brand className={style.Logo} href="/home">Sodan</Navbar.Brand>
           <Nav className={style.Nav}>

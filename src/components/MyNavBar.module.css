@@ -3,13 +3,18 @@
     text-align: left;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     color: white;
-    
 }
 
 
 .barra{
     height: 90px;
     font-size:larger;
+    padding: 10px 0;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
 .Nav{

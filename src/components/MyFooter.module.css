@@ -1,0 +1,12 @@
+.footer {
+  background-color: #007bff; /* cor de fundo */
+  padding: 20px 0; /* padding superior e inferior, ajuste conforme necessário */
+  color: white; /* cor do texto */
+  font-size: 12px; /* tamanho da fonte */
+  position: relative; /* ou fixed, dependendo do que você deseja */
+  bottom: 0;
+  left: 0;
+  width: 100%; /* ocupa toda a largura */
+  margin: 0; /* remove margens externas */
+}
+  

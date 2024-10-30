@@ -2,12 +2,10 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import style from './Permissao.module.css'
 import Container from 'react-bootstrap/esm/Container';
-import MyNavBar from '../components/MyNavBar.jsx';
 
 const Permissao = () => {
   return (
     <div className={style.div}>
-      <MyNavBar/>
       <Container className={style.container}>
   <Form className={style.form}>
     <h1>Permissões do Gerente</h1>

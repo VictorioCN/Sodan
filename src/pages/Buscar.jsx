@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import style from './Buscar.module.css'
-import MyNavBar from '../components/MyNavBar.jsx';
 
 const Buscar = () => {
   const [buscarTermo, setBuscarTermo] = useState('');
@@ -15,7 +14,6 @@ const Buscar = () => {
 
   return (
     <Container className={style.container}>
-      <MyNavBar/>
       <Row className={style.row}>
         <Col md={8}>
           <Form onSubmit={handleSearch}>

@@ -2,12 +2,10 @@
 import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import style from './Home.module.css'
-import MyNavBar from '../components/MyNavBar.jsx';
 
 const Home = () => {
   return (
     <Container fluid className="p-5">
-      <MyNavBar/>
       <h1 className="text-center mb-4">Bem-vindo ao Sistema de Consulta de Status de Treinamento</h1>
 
       <Row className="mb-5">
