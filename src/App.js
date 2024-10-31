@@ -1,6 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 
+import ConfirmarSenha from './pages/ConfirmarSenha.jsx';
+import EsqueciSenha from './pages/EsqueciSenha.jsx';
 import MyLogin from './pages/MyLogin.jsx';
 import MyNavBar from './components/MyNavBar.jsx';
 import Permissao from './pages/Permissao.jsx';
@@ -13,22 +15,24 @@ import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 
 function App() {
   const location = useLocation();
+  const hiddenNavPaths = ['/', '/EsqueciSenha', '/ConfirmarSenha']
+  const hiddenFooterPaths = ['/', '/EsqueciSenha', '/ConfirmarSenha']
 
   return (
     <div className="App">
-      {/* Renderiza o Navbar apenas se não estiver na página de login */}
-      {location.pathname !== '/' && <MyNavBar />}
+      {!hiddenNavPaths.includes(location.pathname) && <MyNavBar />}
 
       <Routes>
         <Route path='/' element={<MyLogin />} />
+        <Route path='/esquecisenha' element={<EsqueciSenha/>}/>
+        <Route path='/confirmarsenha' element={<ConfirmarSenha/>}/>
         <Route path='/home' element={<Home />} />
         <Route path='/permissao' element={<Permissao />} />
         <Route path='/empregado' element={<Empregado/>} />
         <Route path='/buscar' element={<Buscar />} />
       </Routes>
 
-      {/* Renderiza o footer apenas se não estiver na página de login */}
-      {location.pathname !== '/' && <MyFooter />}
+      {!hiddenFooterPaths.includes(location.pathname) && <MyFooter />}
     </div>
   );
 }

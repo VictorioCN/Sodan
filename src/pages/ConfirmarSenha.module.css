@@ -1,0 +1,25 @@
+.container{
+    text-align: center;
+}
+
+.mySenha{
+    color: rgb(13, 37, 246);
+    font-weight: bold;
+}
+
+.txtSenha{
+    width: 500px;
+    border-color: rgb(13, 37, 246);
+    border-radius: 100px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.btn{
+    border-radius: 100px;
+    margin-bottom: 10px;
+}
+
+.Tudo{
+    margin-top: 195px;
+}

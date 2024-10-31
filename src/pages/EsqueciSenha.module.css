@@ -1,0 +1,25 @@
+.container{
+    text-align: center;
+}
+
+.myEmail{
+    color: rgb(13, 37, 246);
+    font-weight: bold;
+}
+
+.txtLogin{
+    width: 500px;
+    border-color: rgb(13, 37, 246);
+    border-radius: 100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn{
+    border-radius: 100px;
+    margin-bottom: 10px;
+}
+
+.Tudo{
+    margin-top: 195px;
+}
