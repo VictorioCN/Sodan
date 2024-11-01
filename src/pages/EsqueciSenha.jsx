@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/esm/Container';
-import style from './EsqueciSenha.module.css'
+import style from '../css/EsqueciSenha.module.css'
 import { Link } from 'react-router-dom';
 
 const EsqueciSenha = () => {
@@ -14,7 +14,7 @@ const EsqueciSenha = () => {
        <Form>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label className={style.myEmail}>Email</Form.Label>
-        <Form.Control className={style.txtLogin} type="email" placeholder="" />
+        <Form.Control className={style.txtLogin} type="email" placeholder="Digite seu email" />
         <Form.Text className="text-muted">
         </Form.Text>
       </Form.Group>

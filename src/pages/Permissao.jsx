@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import style from './Permissao.module.css'
+import style from '../css/Permissao.module.css'
 import Container from 'react-bootstrap/esm/Container';
 
 const Permissao = () => {

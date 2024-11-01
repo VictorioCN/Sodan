@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/esm/Container';
-import style from './ConfirmarSenha.module.css';
+import style from '../css/ConfirmarSenha.module.css';
 import { Link } from 'react-router-dom';
 
 const ConfirmacaoSenha = () => {

@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { FaSearch } from 'react-icons/fa';
-import style from './Empregado.module.css';
+import style from '../css/Empregado.module.css';
 import Container from 'react-bootstrap/esm/Container';
 
 const Empregado = () => {
@@ -102,18 +102,21 @@ const Empregado = () => {
                   label="Pendente"
                   name="treinamento1"
                   id="treinamento1Pendente"
+                  className={style.pendente}
                 />
                 <Form.Check
                   type="radio"
                   label="Em Andamento"
                   name="treinamento1"
                   id="treinamento1EmAndamento"
+                  className={style.emAndamento}
                 />
                 <Form.Check
                   type="radio"
                   label="Concluído"
                   name="treinamento1"
                   id="treinamento1Concluido"
+                  className={style.concluido}
                 />
               </div>
                 <hr/>
@@ -124,18 +127,21 @@ const Empregado = () => {
                   label="Pendente"
                   name="treinamento2"
                   id="treinamento2Pendente"
+                  className={style.pendente}
                 />
                 <Form.Check
                   type="radio"
                   label="Em Andamento"
                   name="treinamento2"
                   id="treinamento2EmAndamento"
+                  className={style.emAndamento}
                 />
                 <Form.Check
                   type="radio"
                   label="Concluído"
                   name="treinamento2"
                   id="treinamento2Concluido"
+                  className={style.concluido}
                 />
               </div>
                 <hr/>
@@ -146,18 +152,21 @@ const Empregado = () => {
                   label="Pendente"
                   name="treinamento3"
                   id="treinamento3Pendente"
+                  className={style.pendente}
                 />
                 <Form.Check
                   type="radio"
                   label="Em Andamento"
                   name="treinamento3"
                   id="treinamento3EmAndamento"
+                  className={style.emAndamento}
                 />
                 <Form.Check
                   type="radio"
                   label="Concluído"
                   name="treinamento3"
                   id="treinamento3Concluido"
+                  className={style.concluido}
                 />
               </div>
                 <hr/>
@@ -168,18 +177,21 @@ const Empregado = () => {
                   label="Pendente"
                   name="treinamento4"
                   id="treinamento4Pendente"
+                  className={style.pendente}
                 />
                 <Form.Check
                   type="radio"
                   label="Em Andamento"
                   name="treinamento4"
                   id="treinamento4EmAndamento"
+                  className={style.emAndamento}
                 />
                 <Form.Check
                   type="radio"
                   label="Concluído"
                   name="treinamento4"
                   id="treinamento4Concluido"
+                  className={style.concluido}
                 />
               </div>
             </div>

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
-import style from './Home.module.css'
+import style from '../css/Home.module.css'
 
 const Home = () => {
   return (
@@ -10,8 +10,8 @@ const Home = () => {
 
       <Row className="mb-5">
         <Col md={12}>
-          <Card>
-            <Card.Body>
+          <Card className={style.cTudo}>
+            <Card.Body className={style.cartao}>
               <Card.Title className={style.titulo}>Sobre o Nosso Sistema</Card.Title>
               <Card.Text className={style.texto}>
                 Nosso sistema foi desenvolvido para facilitar a consulta do status de treinamentos
@@ -25,8 +25,8 @@ const Home = () => {
 
       <Row className="mb-5">
         <Col md={12}>
-          <Card>
-            <Card.Body>
+          <Card className={style.cTudo}>
+            <Card.Body className={style.cartao}>
               <Card.Title className={style.titulo}>Nossa História</Card.Title>
               <Card.Text className={style.texto}>
                 Fundada em 2024, nossa empresa nasceu com o objetivo de mostrar se as pessoas são aptas á realizarem suas funções.
@@ -42,8 +42,8 @@ const Home = () => {
 
       <Row>
         <Col md={12}>
-          <Card>
-            <Card.Body>
+          <Card className={style.cTudo}>
+            <Card.Body className={style.cartao}>
               <Card.Title className={style.titulo}>Nosso Objetivo</Card.Title>
               <Card.Text className={style.texto}>
               A funcionalidade de busca por treinamento ou empregado é uma das principais características do nosso sistema, 

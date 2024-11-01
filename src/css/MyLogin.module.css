@@ -4,11 +4,13 @@
 
 .myEmail{
     color: rgb(13, 37, 246);
+    font-weight: bold;
     
 }
 
 .mySenha{
     color: rgb(13, 37, 246);
+    font-weight: bold;
 }
 
 .txtSenha{

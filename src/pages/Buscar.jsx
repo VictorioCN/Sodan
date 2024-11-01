@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
-import style from './Buscar.module.css'
+import style from '../css/Buscar.module.css'
 
 const Buscar = () => {
   const [buscarTermo, setBuscarTermo] = useState('');

@@ -1,0 +1,30 @@
+.titulo{
+    color: blue;
+    font-size: 35px;
+    text-decoration: underline;
+}
+
+h1{
+    color: blue;
+    margin-top: 40px;
+    text-decoration: underline;
+}
+
+.texto{
+    color: blue;
+    font-size: 18px;
+}
+
+.cartao{
+   margin-right: 300px;
+   margin-left: 300px;
+   
+}
+
+.cTudo{
+ border: none;
+ background-color: rgb(218, 224, 225);
+ margin-right: 200px;
+ margin-left: 200px;
+}
+
