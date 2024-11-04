@@ -8,7 +8,7 @@ const Permissao = () => {
     <div className={style.div}>
       <Container className={style.container}>
   <Form className={style.form}>
-    <h1>Permissões do Gerente</h1>
+    <h1>Permissões do Técnico</h1>
     <Form.Group className="mb-3" controlId="formBasicMatricula">
         <Form.Label className={style.label}>N° Matrícula*</Form.Label>
         <Form.Control className={style.input} type="number"/>
