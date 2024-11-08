@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { FaPhone, FaInstagram } from 'react-icons/fa';
 import style from '../css/MyFooter.module.css';
+import { Link } from 'react-router-dom';
 
 function Footer() {
   return (
@@ -9,8 +10,9 @@ function Footer() {
       <Container fluid> {/* Mudar para fluid */}
         <Row>
           <Col md={4}>
-            <h5>Sobre nós</h5>
+            <Link to="/home" className={style.SobreNos}>Sobre Nós</Link>
             <p>Bem-vindo ao SODAN, sua plataforma confiável para monitorar e gerenciar o status de treinamentos!</p>
+            <p className={style.info}>Clique acima para saber mais Sobre Nós</p>
           </Col>
           <Col md={4}>
             <h5>Entre em contato</h5>

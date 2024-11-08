@@ -5,12 +5,14 @@
 .myEmail{
     color: rgb(13, 37, 246);
     font-weight: bold;
+    font-size: 40px;
     
 }
 
 .mySenha{
     color: rgb(13, 37, 246);
     font-weight: bold;
+    font-size: 40px;
 }
 
 .txtSenha{
@@ -19,6 +21,7 @@
     border-radius: 100px;
     margin-right: auto;
     margin-left: auto;
+    width: 600px;
 }
 
 .txtLogin{
@@ -27,13 +30,23 @@
     border-radius: 100px;
     margin-left: auto;
     margin-right: auto;
+    width: 600px;
 }
 
 .btn{
     border-radius: 100px;
     margin-bottom: 10px;
+    width: 130px;
+    height: 40px;
+    font-size: large;
+    font-weight: bold;
 }
 
 .Tudo{
-    margin-top: 195px;
+    margin-top: 100px;
 }
+
+.esqueciS{
+    font-size: 20px;
+}
+

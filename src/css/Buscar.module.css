@@ -2,7 +2,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 70px;
     height: 100vh;
     margin-left: 180px;
 }
@@ -28,3 +27,4 @@
     font: bold;
     margin-top: 30px;
 }
+

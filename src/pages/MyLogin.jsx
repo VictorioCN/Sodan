@@ -26,7 +26,7 @@ const MyLogin = () => {
 
       if (user) {
         // Se o login for bem-sucedido, redireciona para a página Home
-        navigate('/home');
+        navigate('/buscar');
       } else {
         alert('Login ou senha incorretos!');
       }
@@ -37,7 +37,7 @@ const MyLogin = () => {
 
   return (
     <div className={style.Tudo}>
-      <img src="./LogoSodan.png" alt="Logo" width={300} height={240} />
+      <img src="./LogoSodan.png" alt="Logo" width={550} height={440} />
 
       <Container className={style.container}>
         <Form onSubmit={handleLogin}>
@@ -66,7 +66,7 @@ const MyLogin = () => {
             Entrar
           </Button>
           <br />
-          <Link to="/EsqueciSenha">Esqueci a Senha</Link>
+          <Link to="/EsqueciSenha" className={style.esqueciS}>Esqueci a Senha</Link>
         </Form>
       </Container>
     </div>
