@@ -9,6 +9,9 @@ import Permissao from './pages/Permissao.jsx';
 import Buscar from './pages/Buscar.jsx';
 import Home from './pages/Home.jsx';
 import Empregado from './pages/Empregado.jsx';
+import CadastrarEmpregado from './pages/CadastrarEmpregado.jsx';
+import AtualizarEmpregado from './pages/AtualizarEmpregado.jsx';
+import ExcluirEmpregado from './pages/ExcluirEmpregado.jsx';
 import MyFooter from './components/MyFooter.jsx';
 
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
@@ -29,6 +32,9 @@ function App() {
         <Route path='/home' element={<Home />} />
         <Route path='/permissao' element={<Permissao />} />
         <Route path='/empregado' element={<Empregado/>} />
+        <Route path='/empregado/cadastrar' element={<CadastrarEmpregado/>} />
+        <Route path='/empregado/atualizar' element={<AtualizarEmpregado/>} />
+        <Route path='/empregado/excluir' element={<ExcluirEmpregado/>} />
         <Route path='/buscar' element={<Buscar />} />
       </Routes>
 
