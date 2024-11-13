@@ -91,7 +91,7 @@ const ExcluirEmpregado = () => {
             </Form>
           </Tab>
 
-          <Tab eventKey="treinamentos" title="Treinamentos">
+          {/* <Tab eventKey="treinamentos" title="Treinamentos">
             <div className="text-center mt-3">
               <h2>Treinamentos Disponíveis</h2>
 
@@ -195,7 +195,7 @@ const ExcluirEmpregado = () => {
                 />
               </div>
             </div>
-          </Tab>
+          </Tab> */}
         </Tabs>
 
         <div className="d-flex justify-content-center mt-3">
