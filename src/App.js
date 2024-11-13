@@ -19,7 +19,7 @@ import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 function App() {
   const location = useLocation();
   const hiddenNavPaths = ['/', '/EsqueciSenha', '/ConfirmarSenha']
-  const hiddenFooterPaths = ['/', '/EsqueciSenha', '/ConfirmarSenha']
+  const hiddenFooterPaths = ['/', '/EsqueciSenha', '/ConfirmarSenha','/Empregado']
 
   return (
     <div className="App">

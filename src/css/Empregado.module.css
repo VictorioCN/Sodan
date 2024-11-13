@@ -14,7 +14,7 @@
     border-radius: 8px; /* Cantos arredondados */
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Sombra para destacar o container */
     padding: 2rem; /* Espaçamento interno */
-    width: 400px; /* Largura fixa para o formulário */
+    width: 800px; /* Largura fixa para o formulário */
     margin: 0 auto; /* Centraliza o container */
   }
   
@@ -34,11 +34,24 @@
     border-radius: 100px;
     margin-left: auto;
     margin-right: auto;
+    width: 360px;
+
+  }
+
+  .inputInfo {
+    margin: auto;
+    border-color: rgb(13, 37, 246);
+    border-radius: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 630px;
 
   }
   
   .btn_cadastrar {
-    width: auto; /* Mantém a largura automática para os botões */
+    width: 160px; /* Mantém a largura automática para os botões */
+    font-weight: bold;
+    border-radius: 30px;
   }
   
   .nomeTreinamento{
@@ -59,3 +72,20 @@
     color: blue;
   }
 
+.pendente{
+  font-weight: bold;
+}
+
+.emAndamento{
+  font-weight: bold;
+}
+
+.concluido{
+  font-weight: bold;
+}
+
+.cardi{
+  margin-top: 200px;
+  margin-bottom: 250px;
+  height: 250px;
+}

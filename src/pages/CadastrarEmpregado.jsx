@@ -18,17 +18,17 @@ const CadastrarEmpregado = () => {
 
               <Form.Group className="mb-3" controlId="formBasicMatricula">
                 <Form.Label className={style.label}>N° Matrícula*</Form.Label>
-                <Form.Control className={style.input} type="number" />
+                <Form.Control className={style.inputInfo} type="number" />
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicNome">
                 <Form.Label className={style.label}>Nome Completo*</Form.Label>
-                <Form.Control className={style.input} type="text" />
+                <Form.Control className={style.inputInfo} type="text" />
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicCPF">
                 <Form.Label className={style.label}>CPF*</Form.Label>
-                <Form.Control className={style.input} type="text" />
+                <Form.Control className={style.inputInfo} type="text" />
               </Form.Group>
                 <hr/>
               <div className="d-flex justify-content-center mb-3">
@@ -55,12 +55,12 @@ const CadastrarEmpregado = () => {
                 <hr/>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label className={style.label}>Email*</Form.Label>
-                <Form.Control className={style.input} type="email" />
+                <Form.Control className={style.inputInfo} type="email" />
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicTelefone">
                 <Form.Label className={style.label}>Telefone*</Form.Label>
-                <Form.Control className={style.input} type="text" />
+                <Form.Control className={style.inputInfo} type="text" />
               </Form.Group>
 
               <div className="d-flex justify-content-center mb-3">

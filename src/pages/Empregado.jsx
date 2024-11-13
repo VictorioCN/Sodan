@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Container, Card } from 'react-bootstrap';
+import style from '../css/Empregado.module.css';
 
 function ButtonPage() {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ function ButtonPage() {
 
   return (
     <Container className="d-flex justify-content-center mt-5 mb-5">
-      <Card style={{ width: '24rem' }} className="p-4 shadow">
+      <Card style={{ width: '24rem' }} className={style.cardi}>
         <Card.Body className="text-center">
           <Card.Title>Gestão de Empregados</Card.Title>
           <Button
