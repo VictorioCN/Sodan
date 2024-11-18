@@ -1,195 +1,267 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
-import style from '../css/Empregado.module.css';
+import axios from 'axios';
 import Container from 'react-bootstrap/esm/Container';
+import style from '../css/Empregado.module.css';
 
 const CadastrarEmpregado = () => {
+  // Estado para armazenar os dados do formulário
+  const [formData, setFormData] = useState({
+    matricula: '',
+    nome: '',
+    cpf: '',
+    cidade: '',
+    bairro: '',
+    rua: '',
+    numeroRua: '',
+    email: '',
+    telefone: '',
+    dataNascimento: '',
+    dataAdmissao: '',
+    treinamentos: []  // Array de objetos para armazenar status de cada treinamento
+  });
+
+  // Estado para armazenar os dados dos treinamentos
+  const [treinamentos, setTreinamentos] = useState([]);
+
+  // Função para buscar os treinamentos do backend
+  const fetchTreinamentos = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/empregado/treinamentos');
+      const treinamentosComStatus = response.data.map(treinamento => ({
+        ...treinamento, // Inclui as propriedades do treinamento
+        status: '' // Adiciona um status inicial vazio
+      }));
+      setTreinamentos(treinamentosComStatus);
+      // Inicializa os treinamentos no formData
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        treinamentos: treinamentosComStatus.map(treinamento => ({
+          idTreinamento: treinamento.ID_TREINAMENTO,
+          status: ''
+        }))
+      }));
+    } catch (error) {
+      console.error('Erro ao buscar treinamentos:', error);
+    }
+  };
+
+  // Função para atualizar o estado do formulário
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  // Função para atualizar o status de cada treinamento selecionado
+  const handleTreinamentoChange = (treinamentoIndex, status) => {
+    // Verifica se a posição do treinamento já existe no formData
+    const newTreinamentos = [...formData.treinamentos];
+    newTreinamentos[treinamentoIndex] = {
+      ...newTreinamentos[treinamentoIndex],  // Preserva os outros campos
+      status: status  // Atualiza apenas o status
+    };
+
+    setFormData({
+      ...formData,
+      treinamentos: newTreinamentos,
+    });
+  };
+
+  // Função de envio do formulário
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/empregado/cadastrar', formData);
+      alert(response.data.message);  // Exibe a resposta do backend
+      // Limpa o formulário após o cadastro bem-sucedido
+      setFormData({
+        matricula: '',
+        nome: '',
+        cpf: '',
+        cidade: '',
+        bairro: '',
+        rua: '',
+        numeroRua: '',
+        email: '',
+        telefone: '',
+        dataNascimento: '',
+        dataAdmissao: '',
+        treinamentos: []
+      });
+    } catch (error) {
+      console.error(error);
+      alert('Erro ao cadastrar empregado!');  // Exibe um erro genérico
+    }
+  };
+
+  // Carrega os treinamentos quando o componente é montado
+  useEffect(() => {
+    fetchTreinamentos();
+  }, []);
+
   return (
-    <div className={style.div}>
-      <Container className={style.container}>
+    <Container className={style.container}>
+      <Form onSubmit={handleSubmit} className={style.form}>
+        <h1 className="text-center">Cadastro do Empregado</h1>
 
-        <Tabs defaultActiveKey="cadastro" id="uncontrolled-tab-example" className="mb-3">
-          <Tab eventKey="cadastro" title="Cadastro do Empregado">
-            <Form className={style.form}>
-              <h1 className="text-center">Cadastro do Empregado</h1>
+        {/* Dados do empregado */}
+        <Form.Group className="mb-3" controlId="formBasicMatricula">
+          <Form.Label className={style.label}>N° Matrícula*</Form.Label>
+          <Form.Control
+            type="number"
+            name="matricula"
+            value={formData.matricula}
+            onChange={handleInputChange}
+            required
+          />
+        </Form.Group>
 
-              <Form.Group className="mb-3" controlId="formBasicMatricula">
-                <Form.Label className={style.label}>N° Matrícula*</Form.Label>
-                <Form.Control className={style.inputInfo} type="number" />
-              </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicNome">
+          <Form.Label className={style.label}>Nome Completo*</Form.Label>
+          <Form.Control
+            type="text"
+            name="nome"
+            value={formData.nome}
+            onChange={handleInputChange}
+            required
+          />
+        </Form.Group>
 
-              <Form.Group className="mb-3" controlId="formBasicNome">
-                <Form.Label className={style.label}>Nome Completo*</Form.Label>
-                <Form.Control className={style.inputInfo} type="text" />
-              </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicCPF">
+          <Form.Label className={style.label}>CPF*</Form.Label>
+          <Form.Control
+            type="text"
+            name="cpf"
+            value={formData.cpf}
+            onChange={handleInputChange}
+            required
+          />
+        </Form.Group>
 
-              <Form.Group className="mb-3" controlId="formBasicCPF">
-                <Form.Label className={style.label}>CPF*</Form.Label>
-                <Form.Control className={style.inputInfo} type="text" />
-              </Form.Group>
-                <hr/>
-              <div className="d-flex justify-content-center mb-3">
-                <Form.Group className="me-2" controlId="formBasicRua">
-                  <Form.Label className={style.label}>Rua*</Form.Label>
-                  <Form.Control className={style.input} type="text" />
-                </Form.Group>
-                <Form.Group controlId="formBasicNumero">
-                  <Form.Label className={style.label}>N°*</Form.Label>
-                  <Form.Control className={style.input} type="text" />
-                </Form.Group>
-              </div>
-
-              <div className="d-flex justify-content-center mb-3">
-                <Form.Group className="me-2" controlId="formBasicCidade">
-                  <Form.Label className={style.label}>Cidade*</Form.Label>
-                  <Form.Control className={style.input} type="text" />
-                </Form.Group>
-                <Form.Group controlId="formBasicBairro">
-                  <Form.Label className={style.label}>Bairro*</Form.Label>
-                  <Form.Control className={style.input} type="text" />
-                </Form.Group>
-              </div>
-                <hr/>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label className={style.label}>Email*</Form.Label>
-                <Form.Control className={style.inputInfo} type="email" />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formBasicTelefone">
-                <Form.Label className={style.label}>Telefone*</Form.Label>
-                <Form.Control className={style.inputInfo} type="text" />
-              </Form.Group>
-
-              <div className="d-flex justify-content-center mb-3">
-                <Form.Group className="me-2" controlId="formBasicDataNascimento">
-                  <Form.Label className={style.label}>Data de Nascimento*</Form.Label>
-                  <Form.Control className={style.input} type="date" />
-                </Form.Group>
-                <Form.Group controlId="formBasicDataAdmissao">
-                  <Form.Label className={style.label}>Data de Admissão*</Form.Label>
-                  <Form.Control className={style.input} type="date" />
-                </Form.Group>
-              </div>
-            </Form>
-          </Tab>
-
-          <Tab eventKey="treinamentos" title="Treinamentos">
-            <div className="text-center mt-3">
-              <h2>Treinamentos Disponíveis</h2>
-
-              <div className="mb-3">
-                <h5 className={style.nomeTreinamento}>Treinamento de Operação de Máquinas e Equipamentos</h5>
-                <Form.Check
-                  type="radio"
-                  label="Pendente"
-                  name="treinamento1"
-                  id="treinamento1Pendente"
-                  className={style.pendente}
-                />
-                <Form.Check
-                  type="radio"
-                  label="Em Andamento"
-                  name="treinamento1"
-                  id="treinamento1EmAndamento"
-                  className={style.emAndamento}
-                />
-                <Form.Check
-                  type="radio"
-                  label="Concluído"
-                  name="treinamento1"
-                  id="treinamento1Concluido"
-                  className={style.concluido}
-                />
-              </div>
-                <hr/>
-              <div className="mb-3">
-                <h5 className={style.nomeTreinamento}>Treinamento de Segurança no Trabalho</h5>
-                <Form.Check
-                  type="radio"
-                  label="Pendente"
-                  name="treinamento2"
-                  id="treinamento2Pendente"
-                  className={style.pendente}
-                />
-                <Form.Check
-                  type="radio"
-                  label="Em Andamento"
-                  name="treinamento2"
-                  id="treinamento2EmAndamento"
-                  className={style.emAndamento}
-                />
-                <Form.Check
-                  type="radio"
-                  label="Concluído"
-                  name="treinamento2"
-                  id="treinamento2Concluido"
-                  className={style.concluido}
-                />
-              </div>
-                <hr/>
-              <div className="mb-3">
-                <h5 className={style.nomeTreinamento}>Treinamento de Gestão de Recursos Naturais</h5>
-                <Form.Check
-                  type="radio"
-                  label="Pendente"
-                  name="treinamento3"
-                  id="treinamento3Pendente"
-                  className={style.pendente}
-                />
-                <Form.Check
-                  type="radio"
-                  label="Em Andamento"
-                  name="treinamento3"
-                  id="treinamento3EmAndamento"
-                  className={style.emAndamento}
-                />
-                <Form.Check
-                  type="radio"
-                  label="Concluído"
-                  name="treinamento3"
-                  id="treinamento3Concluido"
-                  className={style.concluido}
-                />
-              </div>
-                <hr/>
-              <div className="mb-3">
-                <h5 className={style.nomeTreinamento}>Treinamento de Segurança no Trabalho</h5>
-                <Form.Check
-                  type="radio"
-                  label="Pendente"
-                  name="treinamento4"
-                  id="treinamento4Pendente"
-                  className={style.pendente}
-                />
-                <Form.Check
-                  type="radio"
-                  label="Em Andamento"
-                  name="treinamento4"
-                  id="treinamento4EmAndamento"
-                  className={style.emAndamento}
-                />
-                <Form.Check
-                  type="radio"
-                  label="Concluído"
-                  name="treinamento4"
-                  id="treinamento4Concluido"
-                  className={style.concluido}
-                />
-              </div>
-            </div>
-          </Tab>
-        </Tabs>
-
-        <div className="d-flex justify-content-center mt-3">
-          <Button variant="primary" type="submit" className={`me-2 ${style.btn_cadastrar}`}>
-            Cadastrar
-          </Button>
+        {/* Endereço */}
+        <div className="d-flex justify-content-center mb-3">
+          <Form.Group className="me-2" controlId="formBasicRua">
+            <Form.Label className={style.label}>Rua*</Form.Label>
+            <Form.Control
+              type="text"
+              name="rua"
+              value={formData.rua}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+          <Form.Group controlId="formBasicNumero">
+            <Form.Label className={style.label}>N°*</Form.Label>
+            <Form.Control
+              type="text"
+              name="numeroRua"
+              value={formData.numeroRua}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
         </div>
-      </Container>
-    </div>
+
+        <div className="d-flex justify-content-center mb-3">
+          <Form.Group className="me-2" controlId="formBasicCidade">
+            <Form.Label className={style.label}>Cidade*</Form.Label>
+            <Form.Control
+              type="text"
+              name="cidade"
+              value={formData.cidade}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+          <Form.Group controlId="formBasicBairro">
+            <Form.Label className={style.label}>Bairro*</Form.Label>
+            <Form.Control
+              type="text"
+              name="bairro"
+              value={formData.bairro}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+        </div>
+
+        {/* Dados de contato */}
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label className={style.label}>Email*</Form.Label>
+          <Form.Control
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            required
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicTelefone">
+          <Form.Label className={style.label}>Telefone*</Form.Label>
+          <Form.Control
+            type="tel"
+            name="telefone"
+            value={formData.telefone}
+            onChange={handleInputChange}
+            required
+          />
+        </Form.Group>
+
+        {/* Data de nascimento e admissão */}
+        <div className="d-flex justify-content-center mb-3">
+          <Form.Group className="me-2" controlId="formBasicDataNascimento">
+            <Form.Label className={style.label}>Data de Nascimento*</Form.Label>
+            <Form.Control
+              type="date"
+              name="dataNascimento"
+              value={formData.dataNascimento}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+          <Form.Group controlId="formBasicDataAdmissao">
+            <Form.Label className={style.label}>Data de Admissão*</Form.Label>
+            <Form.Control
+              type="date"
+              name="dataAdmissao"
+              value={formData.dataAdmissao}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+        </div>
+
+        {/* Treinamentos */}
+        <h1>Treinamentos</h1>
+        {treinamentos.length > 0 && formData.treinamentos.map((treinamento, index) => (
+          <Form.Group key={index} className="mb-3">
+            <Form.Label className={style.label}>{treinamentos[index].NOME_TREINAMENTO}</Form.Label>
+            <Form.Control
+              as="select"
+              value={treinamento.status}
+              onChange={(e) => handleTreinamentoChange(index, e.target.value)}
+              required
+            >
+              <option value="">Selecione o Status</option>
+              <option value="Concluído">Concluído</option>
+              <option value="Em andamento">Em andamento</option>
+              <option value="Pendente">Pendente</option>
+            </Form.Control>
+          </Form.Group>
+        ))}
+
+        {/* Botão de submit */}
+        <Button variant="primary" type="submit">
+          Cadastrar Empregado
+        </Button>
+      </Form>
+    </Container>
   );
 };
 
