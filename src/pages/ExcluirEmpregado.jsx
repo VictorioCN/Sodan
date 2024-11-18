@@ -42,10 +42,18 @@ const ExcluirEmpregado = () => {
     }
   };
 
-  // Função para excluir o empregado
+  // Função para excluir o empregado com confirmação
   const excluirEmpregado = async () => {
     if (!empregado) {
       alert('Nenhum empregado encontrado para exclusão');
+      return;
+    }
+
+    // Pop-up de confirmação antes de excluir
+    const confirmarExclusao = window.confirm('Tem certeza de que deseja excluir este empregado?');
+
+    if (!confirmarExclusao) {
+      // Se o usuário cancelar a exclusão
       return;
     }
 
