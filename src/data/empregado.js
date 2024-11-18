@@ -172,4 +172,33 @@ router.post('/cadastrar', async (req, res) => {
   }
 });
 
+// Rota de exclusão do empregado (DELETE)
+router.delete('/empregado/:matricula', async (req, res) => {
+  const matricula = req.params.matricula;
+
+  try {
+    // Verificar se o empregado existe
+    const [empregado] = await db.query('SELECT * FROM TB_EMPREGADO WHERE MAT_EMPREGADO = ?', [matricula]);
+
+    if (!empregado || empregado.length === 0) {
+      return res.status(404).json({ message: 'Empregado não encontrado' });
+    }
+
+    // Excluir as associações de treinamento antes de excluir o empregado
+    await db.query('DELETE FROM TB_EMPREGADO_has_TB_TREINAMENTO WHERE TB_EMPREGADO_MAT_EMPREGADO = ?', [matricula]);
+
+    // Excluir o empregado
+    const [result] = await db.query('DELETE FROM TB_EMPREGADO WHERE MAT_EMPREGADO = ?', [matricula]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Erro ao excluir empregado' });
+    }
+
+    res.status(200).json({ message: 'Empregado excluído com sucesso!' });
+  } catch (error) {
+    console.error('Erro ao excluir empregado:', error);
+    res.status(500).json({ message: 'Erro ao excluir empregado', error: error.message });
+  }
+});
+
 module.exports = router;

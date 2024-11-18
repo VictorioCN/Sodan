@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
 import { FaSearch } from 'react-icons/fa';
 import axios from 'axios';
 import style from '../css/Empregado.module.css';
@@ -142,8 +140,8 @@ const AtualizarEmpregado = () => {
           </Form>
         </div>
 
-        <Tabs defaultActiveKey="atualizar" id="uncontrolled-tab-example" className="mb-3">
-          <Tab eventKey="atualizar" title="Atualização do Empregado">
+        <Container defaultActiveKey="atualizar" id="uncontrolled-tab-example" className="mb-3">
+          <div eventKey="atualizar" title="Atualização do Empregado">
             {empregadoEncontrado && (
               <Form className={style.form} onSubmit={atualizarEmpregado}>
                 <h1 className="text-center">Atualização do Empregado</h1>
@@ -290,6 +288,7 @@ const AtualizarEmpregado = () => {
                 </div>
 
                 {/* Seleção de treinamentos */}
+                <hr/>
                 <h1 className="text-center mb-3">Treinamentos</h1>
                 {treinamentos.map((treinamento) => {
                   const empregadoTreinamento = formData.treinamentos.find(
@@ -321,8 +320,8 @@ const AtualizarEmpregado = () => {
                 </div>
               </Form>
             )}
-          </Tab>
-        </Tabs>
+          </div>
+        </Container>
       </Container>
     </div>
   );

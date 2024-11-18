@@ -157,6 +157,7 @@ const CadastrarEmpregado = () => {
         </Form.Group>
 
         {/* Endereço */}
+        <hr/>
         <div className="d-flex justify-content-center mb-3">
           <Form.Group className="me-2" controlId="formBasicRua">
             <Form.Label className={style.label}>Rua*</Form.Label>
@@ -204,6 +205,7 @@ const CadastrarEmpregado = () => {
         </div>
 
         {/* Dados de contato */}
+        <hr/>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label className={style.label}>Email*</Form.Label>
           <Form.Control
@@ -251,6 +253,7 @@ const CadastrarEmpregado = () => {
         </div>
 
         {/* Treinamentos */}
+        <hr/>
         <h1>Treinamentos</h1>
         {treinamentos.length > 0 && formData.treinamentos.map((treinamento, index) => (
           <Form.Group key={index} className="mb-3">

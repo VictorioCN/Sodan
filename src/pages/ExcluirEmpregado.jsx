@@ -1,13 +1,73 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
 import { FaSearch } from 'react-icons/fa';
+import axios from 'axios';
 import style from '../css/Empregado.module.css';
 import Container from 'react-bootstrap/esm/Container';
 
 const ExcluirEmpregado = () => {
+  const [matriculaBusca, setMatriculaBusca] = useState('');
+  const [empregado, setEmpregado] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const formatDate = (date) => {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toISOString().split('T')[0]; // Formato "YYYY-MM-DD"
+  };
+
+  // Função para buscar o empregado
+  const buscarEmpregado = async () => {
+    if (!matriculaBusca) {
+      alert('Por favor, insira o número da matrícula');
+      return;
+    }
+
+    setLoading(true);
+    setErrorMessage('');
+    
+    try {
+      const response = await axios.get(`http://localhost:5000/api/empregado/${matriculaBusca}`);
+      const empregado = response.data;
+      setEmpregado(empregado);  // Atualiza o estado com os dados do empregado
+      alert('Empregado encontrado!');
+    } catch (error) {
+      console.error(error);
+      setErrorMessage('Erro ao buscar empregado. Verifique a matrícula ou tente novamente.');
+      alert('Erro ao buscar empregado. Verifique a matrícula ou tente novamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Função para excluir o empregado
+  const excluirEmpregado = async () => {
+    if (!empregado) {
+      alert('Nenhum empregado encontrado para exclusão');
+      return;
+    }
+
+    setLoading(true);
+    setErrorMessage('');
+
+    try {
+      const response = await axios.delete(`http://localhost:5000/api/empregado/empregado/${empregado.MAT_EMPREGADO}`);
+      if (response.status === 200) {
+        alert('Empregado excluído com sucesso!');
+        setEmpregado(null);  // Limpa o estado após a exclusão
+        setMatriculaBusca('');  // Limpa a matrícula de busca
+      }
+    } catch (error) {
+      console.error(error);
+      setErrorMessage('Erro ao excluir empregado. Tente novamente mais tarde.');
+      alert('Erro ao excluir empregado. Tente novamente mais tarde.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className={style.div}>
       <Container className={style.container}>
@@ -16,196 +76,170 @@ const ExcluirEmpregado = () => {
           <Form className="d-flex">
             <Form.Control
               type="text"
-              placeholder="Buscar Empregado"
+              placeholder="Buscar Empregado (Matrícula)"
               className={`me-2 ${style.input}`}
+              value={matriculaBusca}
+              onChange={(e) => setMatriculaBusca(e.target.value)}
               aria-label="Buscar Empregado"
+              disabled={loading}
             />
-            <Button variant="outline-secondary" className={style.btn_buscar}>
+            <Button 
+              variant="outline-secondary" 
+              className={style.btn_buscar} 
+              onClick={buscarEmpregado}
+              disabled={loading}
+            >
               <FaSearch />
             </Button>
           </Form>
         </div>
 
-        <Tabs defaultActiveKey="excluir" id="uncontrolled-tab-example" className="mb-3">
-          <Tab eventKey="excluir" title="Exclusão do Empregado">
-            <Form className={style.form}>
-              <h1 className="text-center">Exclusão do Empregado</h1>
+        {/* Mensagem de erro */}
+        {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
 
+        {/* Formulário de exclusão */}
+        {empregado && (
+          <div>
+            <h1 className="text-center">Exclusão do Empregado</h1>
+            <Form className={style.form}>
               <Form.Group className="mb-3" controlId="formBasicMatricula">
                 <Form.Label className={style.label}>N° Matrícula*</Form.Label>
-                <Form.Control className={style.inputInfo} type="number" />
+                <Form.Control
+                  className={style.inputInfo}
+                  type="text"
+                  value={empregado.MAT_EMPREGADO}
+                  readOnly
+                />
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicNome">
                 <Form.Label className={style.label}>Nome Completo*</Form.Label>
-                <Form.Control className={style.inputInfo} type="text" />
+                <Form.Control
+                  className={style.inputInfo}
+                  type="text"
+                  value={empregado.NOME_EMPREGADO}
+                  readOnly
+                />
               </Form.Group>
 
-              <Form.Group className="mb-3" controlId="formBasicCPF">
+              <Form.Group className="mb-3" controlId="formBasicCpf">
                 <Form.Label className={style.label}>CPF*</Form.Label>
-                <Form.Control className={style.inputInfo} type="text" />
+                <Form.Control
+                  className={style.inputInfo}
+                  type="text"
+                  value={empregado.CPF_EMPREGADO}
+                  readOnly
+                />
               </Form.Group>
-                <hr/>
-              <div className="d-flex justify-content-center mb-3">
-                <Form.Group className="me-2" controlId="formBasicRua">
-                  <Form.Label className={style.label}>Rua*</Form.Label>
-                  <Form.Control className={style.input} type="text" />
-                </Form.Group>
-                <Form.Group controlId="formBasicNumero">
-                  <Form.Label className={style.label}>N°*</Form.Label>
-                  <Form.Control className={style.input} type="text" />
-                </Form.Group>
-              </div>
 
-              <div className="d-flex justify-content-center mb-3">
+              {/* Campos "Cidade" e "Bairro" lado a lado */}
+              <hr/>
+              <div className="d-flex justify-content-between mb-3">
                 <Form.Group className="me-2" controlId="formBasicCidade">
                   <Form.Label className={style.label}>Cidade*</Form.Label>
-                  <Form.Control className={style.input} type="text" />
+                  <Form.Control
+                    className={style.inputInfo1}
+                    type="text"
+                    value={empregado.CIDADE}
+                    readOnly
+                  />
                 </Form.Group>
+
                 <Form.Group controlId="formBasicBairro">
                   <Form.Label className={style.label}>Bairro*</Form.Label>
-                  <Form.Control className={style.input} type="text" />
+                  <Form.Control
+                    className={style.inputInfo1}
+                    type="text"
+                    value={empregado.BAIRRO}
+                    readOnly
+                  />
                 </Form.Group>
               </div>
-                <hr/>
+
+              {/* Campos "Rua" e "Número da Rua" lado a lado */}
+              <div className="d-flex justify-content-between mb-3">
+                <Form.Group className="me-2" controlId="formBasicRua">
+                  <Form.Label className={style.label}>Rua*</Form.Label>
+                  <Form.Control
+                    className={style.inputInfo1}
+                    type="text"
+                    value={empregado.RUA}
+                    readOnly
+                  />
+                </Form.Group>
+
+                <Form.Group controlId="formBasicNumeroRua">
+                  <Form.Label className={style.label}>Número da Rua*</Form.Label>
+                  <Form.Control
+                    className={style.inputInfo1}
+                    type="text"
+                    value={empregado.NUM_RUA}
+                    readOnly
+                  />
+                </Form.Group>
+              </div>
+
+              <hr/>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label className={style.label}>Email*</Form.Label>
-                <Form.Control className={style.inputInfo} type="email" />
+                <Form.Control
+                  className={style.inputInfo}
+                  type="email"
+                  value={empregado.EMAIL_EMPREGADO}
+                  readOnly
+                />
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicTelefone">
                 <Form.Label className={style.label}>Telefone*</Form.Label>
-                <Form.Control className={style.inputInfo} type="text" />
+                <Form.Control
+                  className={style.inputInfo}
+                  type="text"
+                  value={empregado.TEL_EMPREGADO}
+                  readOnly
+                />
               </Form.Group>
 
-              <div className="d-flex justify-content-center mb-3">
+              {/* Campos "Data de Nascimento" e "Data de Admissão" lado a lado */}
+              <div className="d-flex justify-content-between mb-3">
                 <Form.Group className="me-2" controlId="formBasicDataNascimento">
                   <Form.Label className={style.label}>Data de Nascimento*</Form.Label>
-                  <Form.Control className={style.input} type="date" />
+                  <Form.Control
+                    className={style.inputInfo1}
+                    type="date"
+                    value={formatDate(empregado.DT_NASCIMENTO)}
+                    readOnly
+                  />
                 </Form.Group>
+
                 <Form.Group controlId="formBasicDataAdmissao">
                   <Form.Label className={style.label}>Data de Admissão*</Form.Label>
-                  <Form.Control className={style.input} type="date" />
+                  <Form.Control
+                    className={style.inputInfo1}
+                    type="date"
+                    value={formatDate(empregado.DT_ADMISSAO)}
+                    readOnly
+                  />
                 </Form.Group>
               </div>
+
+              <div className="d-flex justify-content-center mt-3">
+                <Button 
+                  variant="danger" 
+                  onClick={excluirEmpregado} 
+                  className={`me-2 ${style.btn_cadastrar}`}
+                  disabled={loading}
+                >
+                  {loading ? 'Excluindo...' : 'Excluir'}
+                </Button>
+              </div>
             </Form>
-          </Tab>
-
-          {/* <Tab eventKey="treinamentos" title="Treinamentos">
-            <div className="text-center mt-3">
-              <h2>Treinamentos Disponíveis</h2>
-
-              <div className="mb-3">
-                <h5 className={style.nomeTreinamento}>Treinamento de Operação de Máquinas e Equipamentos</h5>
-                <Form.Check
-                  type="radio"
-                  label="Pendente"
-                  name="treinamento1"
-                  id="treinamento1Pendente"
-                  className={style.pendente}
-                />
-                <Form.Check
-                  type="radio"
-                  label="Em Andamento"
-                  name="treinamento1"
-                  id="treinamento1EmAndamento"
-                  className={style.emAndamento}
-                />
-                <Form.Check
-                  type="radio"
-                  label="Concluído"
-                  name="treinamento1"
-                  id="treinamento1Concluido"
-                  className={style.concluido}
-                />
-              </div>
-                <hr/>
-              <div className="mb-3">
-                <h5 className={style.nomeTreinamento}>Treinamento de Segurança no Trabalho</h5>
-                <Form.Check
-                  type="radio"
-                  label="Pendente"
-                  name="treinamento2"
-                  id="treinamento2Pendente"
-                  className={style.pendente}
-                />
-                <Form.Check
-                  type="radio"
-                  label="Em Andamento"
-                  name="treinamento2"
-                  id="treinamento2EmAndamento"
-                  className={style.emAndamento}
-                />
-                <Form.Check
-                  type="radio"
-                  label="Concluído"
-                  name="treinamento2"
-                  id="treinamento2Concluido"
-                  className={style.concluido}
-                />
-              </div>
-                <hr/>
-              <div className="mb-3">
-                <h5 className={style.nomeTreinamento}>Treinamento de Gestão de Recursos Naturais</h5>
-                <Form.Check
-                  type="radio"
-                  label="Pendente"
-                  name="treinamento3"
-                  id="treinamento3Pendente"
-                  className={style.pendente}
-                />
-                <Form.Check
-                  type="radio"
-                  label="Em Andamento"
-                  name="treinamento3"
-                  id="treinamento3EmAndamento"
-                  className={style.emAndamento}
-                />
-                <Form.Check
-                  type="radio"
-                  label="Concluído"
-                  name="treinamento3"
-                  id="treinamento3Concluido"
-                  className={style.concluido}
-                />
-              </div>
-                <hr/>
-              <div className="mb-3">
-                <h5 className={style.nomeTreinamento}>Treinamento de Segurança no Trabalho</h5>
-                <Form.Check
-                  type="radio"
-                  label="Pendente"
-                  name="treinamento4"
-                  id="treinamento4Pendente"
-                  className={style.pendente}
-                />
-                <Form.Check
-                  type="radio"
-                  label="Em Andamento"
-                  name="treinamento4"
-                  id="treinamento4EmAndamento"
-                  className={style.emAndamento}
-                />
-                <Form.Check
-                  type="radio"
-                  label="Concluído"
-                  name="treinamento4"
-                  id="treinamento4Concluido"
-                  className={style.concluido}
-                />
-              </div>
-            </div>
-          </Tab> */}
-        </Tabs>
-
-        <div className="d-flex justify-content-center mt-3">
-          <Button variant="danger" type="submit" className={`me-2 ${style.btn_cadastrar}`}>
-            Excluir
-          </Button>
-        </div>
+          </div>
+        )}
       </Container>
     </div>
   );
 };
 
 export default ExcluirEmpregado;
+
