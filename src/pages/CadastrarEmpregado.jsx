@@ -126,6 +126,7 @@ const CadastrarEmpregado = () => {
         <Form.Group className="mb-3" controlId="formBasicMatricula">
           <Form.Label className={style.label}>N° Matrícula*</Form.Label>
           <Form.Control
+          className={style.inputInfo}
             type="number"
             name="matricula"
             value={formData.matricula}
@@ -137,6 +138,7 @@ const CadastrarEmpregado = () => {
         <Form.Group className="mb-3" controlId="formBasicNome">
           <Form.Label className={style.label}>Nome Completo*</Form.Label>
           <Form.Control
+          className={style.inputInfo}
             type="text"
             name="nome"
             value={formData.nome}
@@ -148,6 +150,7 @@ const CadastrarEmpregado = () => {
         <Form.Group className="mb-3" controlId="formBasicCPF">
           <Form.Label className={style.label}>CPF*</Form.Label>
           <Form.Control
+          className={style.inputInfo}
             type="text"
             name="cpf"
             value={formData.cpf}
@@ -162,6 +165,7 @@ const CadastrarEmpregado = () => {
           <Form.Group className="me-2" controlId="formBasicRua">
             <Form.Label className={style.label}>Rua*</Form.Label>
             <Form.Control
+            className={style.inputInfo1}
               type="text"
               name="rua"
               value={formData.rua}
@@ -172,6 +176,7 @@ const CadastrarEmpregado = () => {
           <Form.Group controlId="formBasicNumero">
             <Form.Label className={style.label}>N°*</Form.Label>
             <Form.Control
+            className={style.inputInfo1}
               type="text"
               name="numeroRua"
               value={formData.numeroRua}
@@ -185,6 +190,7 @@ const CadastrarEmpregado = () => {
           <Form.Group className="me-2" controlId="formBasicCidade">
             <Form.Label className={style.label}>Cidade*</Form.Label>
             <Form.Control
+            className={style.inputInfo1}
               type="text"
               name="cidade"
               value={formData.cidade}
@@ -195,6 +201,7 @@ const CadastrarEmpregado = () => {
           <Form.Group controlId="formBasicBairro">
             <Form.Label className={style.label}>Bairro*</Form.Label>
             <Form.Control
+            className={style.inputInfo1}
               type="text"
               name="bairro"
               value={formData.bairro}
@@ -209,6 +216,7 @@ const CadastrarEmpregado = () => {
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label className={style.label}>Email*</Form.Label>
           <Form.Control
+          className={style.inputInfo}
             type="email"
             name="email"
             value={formData.email}
@@ -220,6 +228,7 @@ const CadastrarEmpregado = () => {
         <Form.Group className="mb-3" controlId="formBasicTelefone">
           <Form.Label className={style.label}>Telefone*</Form.Label>
           <Form.Control
+          className={style.inputInfo}
             type="tel"
             name="telefone"
             value={formData.telefone}
@@ -233,6 +242,7 @@ const CadastrarEmpregado = () => {
           <Form.Group className="me-2" controlId="formBasicDataNascimento">
             <Form.Label className={style.label}>Data de Nascimento*</Form.Label>
             <Form.Control
+            className={style.inputInfo1}
               type="date"
               name="dataNascimento"
               value={formData.dataNascimento}
@@ -243,6 +253,7 @@ const CadastrarEmpregado = () => {
           <Form.Group controlId="formBasicDataAdmissao">
             <Form.Label className={style.label}>Data de Admissão*</Form.Label>
             <Form.Control
+            className={style.inputInfo1}
               type="date"
               name="dataAdmissao"
               value={formData.dataAdmissao}
@@ -259,6 +270,7 @@ const CadastrarEmpregado = () => {
           <Form.Group key={index} className="mb-3">
             <Form.Label className={style.label}>{treinamentos[index].NOME_TREINAMENTO}</Form.Label>
             <Form.Control
+            className={style.select}
               as="select"
               value={treinamento.status}
               onChange={(e) => handleTreinamentoChange(index, e.target.value)}
@@ -273,9 +285,11 @@ const CadastrarEmpregado = () => {
         ))}
 
         {/* Botão de submit */}
-        <Button variant="primary" type="submit">
+        <div className="d-flex justify-content-center mt-3">
+        <Button variant="primary" type="submit" className={`me-2 ${style.btn_cadastrar1}`}>
           Cadastrar Empregado
         </Button>
+        </div>
       </Form>
 
       {/* Modal de confirmação */}

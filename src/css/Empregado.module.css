@@ -53,6 +53,12 @@
     font-weight: bold;
     border-radius: 30px;
   }
+
+  .btn_cadastrar1 {
+    width: 200px; /* Mantém a largura automática para os botões */
+    font-weight: bold;
+    border-radius: 30px;
+  }
   
   .nomeTreinamento{
     color: blue;
@@ -97,4 +103,8 @@
     margin-left: auto;
     margin-right: auto;
     width: 360px;
+}
+
+.select{
+  border-color: blue;
 }
