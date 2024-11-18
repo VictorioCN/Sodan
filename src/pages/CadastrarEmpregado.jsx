@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import Container from 'react-bootstrap/esm/Container';
+import Modal from 'react-bootstrap/Modal';
 import style from '../css/Empregado.module.css';
 
 const CadastrarEmpregado = () => {
@@ -24,6 +25,9 @@ const CadastrarEmpregado = () => {
 
   // Estado para armazenar os dados dos treinamentos
   const [treinamentos, setTreinamentos] = useState([]);
+
+  // Estado para controlar o modal
+  const [showModal, setShowModal] = useState(false);
 
   // Função para buscar os treinamentos do backend
   const fetchTreinamentos = async () => {
@@ -58,11 +62,10 @@ const CadastrarEmpregado = () => {
 
   // Função para atualizar o status de cada treinamento selecionado
   const handleTreinamentoChange = (treinamentoIndex, status) => {
-    // Verifica se a posição do treinamento já existe no formData
     const newTreinamentos = [...formData.treinamentos];
     newTreinamentos[treinamentoIndex] = {
-      ...newTreinamentos[treinamentoIndex],  // Preserva os outros campos
-      status: status  // Atualiza apenas o status
+      ...newTreinamentos[treinamentoIndex], 
+      status: status  
     };
 
     setFormData({
@@ -71,13 +74,18 @@ const CadastrarEmpregado = () => {
     });
   };
 
-  // Função de envio do formulário
-  const handleSubmit = async (e) => {
+  // Função que será chamada ao tentar submeter o formulário
+  const handleSubmit = (e) => {
     e.preventDefault();
+    setShowModal(true);  // Exibe o modal de confirmação
+  };
 
+  // Função para confirmar o cadastro
+  const confirmarCadastro = async () => {
     try {
       const response = await axios.post('http://localhost:5000/api/empregado/cadastrar', formData);
-      alert(response.data.message);  // Exibe a resposta do backend
+      setShowModal(false);  // Fecha o modal
+      alert('Empregado cadastrado com sucesso!');
       // Limpa o formulário após o cadastro bem-sucedido
       setFormData({
         matricula: '',
@@ -97,6 +105,11 @@ const CadastrarEmpregado = () => {
       console.error(error);
       alert('Erro ao cadastrar empregado!');  // Exibe um erro genérico
     }
+  };
+
+  // Função para cancelar o cadastro
+  const cancelarCadastro = () => {
+    setShowModal(false);  // Fecha o modal sem realizar nenhuma ação
   };
 
   // Carrega os treinamentos quando o componente é montado
@@ -261,6 +274,24 @@ const CadastrarEmpregado = () => {
           Cadastrar Empregado
         </Button>
       </Form>
+
+      {/* Modal de confirmação */}
+      <Modal show={showModal} onHide={cancelarCadastro}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmar Cadastro</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Você tem certeza que deseja cadastrar este empregado?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={cancelarCadastro}>
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={confirmarCadastro}>
+            Confirmar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

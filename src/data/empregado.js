@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('./db');  // Importando a conexão com o banco de dados
+const db = require('./db');  // Conexão com o banco de dados
 
 // Rota para obter os treinamentos
 router.get('/treinamentos', async (req, res) => {
@@ -11,6 +11,85 @@ router.get('/treinamentos', async (req, res) => {
   } catch (error) {
     console.error('Erro ao buscar treinamentos:', error);
     res.status(500).json({ message: 'Erro ao buscar treinamentos', error: error.message });
+  }
+});
+
+// Rota para buscar o empregado por matrícula
+router.get('/:matricula', async (req, res) => {
+  const matricula = req.params.matricula;
+
+  try {
+    // Buscar o empregado
+    const [empregado] = await db.query('SELECT * FROM TB_EMPREGADO WHERE MAT_EMPREGADO = ?', [matricula]);
+
+    if (!empregado || empregado.length === 0) {
+      return res.status(404).json({ message: 'Empregado não encontrado' });
+    }
+
+    // Buscar os treinamentos do empregado
+    const [treinamentos] = await db.query(`
+      SELECT t.ID_TREINAMENTO, t.NOME_TREINAMENTO, eht.STATUS_TREINAMENTO
+      FROM TB_TREINAMENTO t
+      JOIN TB_EMPREGADO_has_TB_TREINAMENTO eht ON eht.TB_TREINAMENTO_ID_TREINAMENTO = t.ID_TREINAMENTO
+      WHERE eht.TB_EMPREGADO_MAT_EMPREGADO = ?`, [matricula]);
+
+    const empregadoComTreinamentos = { ...empregado[0], treinamentos };
+    res.status(200).json(empregadoComTreinamentos); // Retorna o empregado com treinamentos
+  } catch (error) {
+    console.error('Erro ao buscar empregado:', error);
+    res.status(500).json({ message: 'Erro ao buscar empregado', error: error.message });
+  }
+});
+
+// Rota para atualizar os dados do empregado
+router.put('/:matricula', async (req, res) => {
+  const matricula = req.params.matricula;
+  const {
+    nome, cpf, cidade, bairro, rua, numeroRua, email, telefone, dataNascimento, dataAdmissao, treinamentos
+  } = req.body;
+
+  try {
+    // Atualizar os dados do empregado
+    const [result] = await db.query(`
+      UPDATE TB_EMPREGADO
+      SET NOME_EMPREGADO = ?, CPF_EMPREGADO = ?, CIDADE = ?, BAIRRO = ?, RUA = ?, NUM_RUA = ?, EMAIL_EMPREGADO = ?, TEL_EMPREGADO = ?, DT_NASCIMENTO = ?, DT_ADMISSAO = ?
+      WHERE MAT_EMPREGADO = ?`, [
+      nome, cpf, cidade, bairro, rua, numeroRua, email, telefone, dataNascimento, dataAdmissao, matricula
+    ]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Empregado não encontrado' });
+    }
+
+    // Atualizar os treinamentos associados ao empregado
+    if (treinamentos && Array.isArray(treinamentos)) {
+      for (const treinamento of treinamentos) {
+        const { idTreinamento, status } = treinamento;
+
+        // Verificar se o treinamento já está associado ao empregado
+        const [treinamentoExistente] = await db.query(`
+          SELECT * FROM TB_EMPREGADO_has_TB_TREINAMENTO
+          WHERE TB_EMPREGADO_MAT_EMPREGADO = ? AND TB_TREINAMENTO_ID_TREINAMENTO = ?`, [matricula, idTreinamento]);
+
+        // Se não existir, inserir um novo
+        if (treinamentoExistente.length === 0) {
+          await db.query(`
+            INSERT INTO TB_EMPREGADO_has_TB_TREINAMENTO (TB_TREINAMENTO_ID_TREINAMENTO, TB_EMPREGADO_MAT_EMPREGADO, STATUS_TREINAMENTO)
+            VALUES (?, ?, ?)`, [idTreinamento, matricula, status]);
+        } else {
+          // Caso contrário, atualizar o status
+          await db.query(`
+            UPDATE TB_EMPREGADO_has_TB_TREINAMENTO
+            SET STATUS_TREINAMENTO = ?
+            WHERE TB_EMPREGADO_MAT_EMPREGADO = ? AND TB_TREINAMENTO_ID_TREINAMENTO = ?`, [status, matricula, idTreinamento]);
+        }
+      }
+    }
+
+    res.status(200).json({ message: 'Empregado atualizado com sucesso!' });
+  } catch (error) {
+    console.error('Erro ao atualizar empregado:', error);
+    res.status(500).json({ message: 'Erro ao atualizar empregado', error: error.message });
   }
 });
 
@@ -55,7 +134,6 @@ router.post('/cadastrar', async (req, res) => {
       ]
     );
 
-    // Verifique se a inserção foi bem-sucedida
     if (!empregadoResult || empregadoResult.affectedRows === 0) {
       throw new Error('Falha ao inserir o empregado no banco de dados');
     }
