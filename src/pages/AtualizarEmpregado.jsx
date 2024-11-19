@@ -297,8 +297,9 @@ const AtualizarEmpregado = () => {
 
                   return (
                     <Form.Group key={treinamento.ID_TREINAMENTO} className="mb-3">
-                      <Form.Label>{treinamento.NOME_TREINAMENTO}</Form.Label>
+                      <Form.Label className={style.label}>{treinamento.NOME_TREINAMENTO}</Form.Label>
                       <Form.Control
+                      className={style.select}
                         as="select"
                         value={empregadoTreinamento ? empregadoTreinamento.status : ''}
                         onChange={(e) => handleTreinamentoChange(e, treinamento.ID_TREINAMENTO)}
