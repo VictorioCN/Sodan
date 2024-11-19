@@ -15,23 +15,20 @@ const MyLogin = () => {
   // Função para lidar com a submissão do formulário
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  
     try {
-      // Faz uma requisição GET para obter a lista de usuários
-      const response = await axios.get('http://localhost:5000/users');
-      const users = response.data;
-
-      // Verifica se existe um usuário com o login e a senha fornecidos
-      const user = users.find((user) => user.login === login && user.senha === senha);
-
-      if (user) {
-        // Se o login for bem-sucedido, redireciona para a página Home
-        navigate('/buscar');
-      } else {
-        alert('Login ou senha incorretos!');
+      const response = await axios.post('http://localhost:5000/usuarios/login', {
+        nomeUsuario: login,
+        senha,
+      });
+  
+      if (response.status === 200) {
+        alert('Login bem-sucedido!');
+        navigate('/buscar'); // Redirecionar para a página Home
       }
     } catch (error) {
       console.error('Erro ao fazer login:', error);
+      alert('Usuário ou senha incorretos!');
     }
   };
 

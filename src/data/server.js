@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');  // Importando o middleware CORS
 const empregadoRoutes = require('./empregado');  // Importando as rotas de empregado
+const usuarioRoutes = require('./usuario');
 
 const app = express();
 const PORT = 5000;
@@ -14,6 +15,9 @@ app.use(bodyParser.json());
 
 // Usando as rotas de empregado
 app.use('/api/empregado', empregadoRoutes);
+
+// Usando as rotas de usuário
+app.use(usuarioRoutes);
 
 // Inicia o servidor
 app.listen(PORT, () => {
