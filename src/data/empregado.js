@@ -2,6 +2,54 @@ const express = require('express');
 const router = express.Router();
 const db = require('./db');  // Conexão com o banco de dados
 
+// Rota para buscar empregado e seus treinamentos
+router.get('/buscar', async (req, res) => {
+  const { termo, status, treinamento } = req.query;
+
+  try {
+    // Base da query SQL
+    let query = `
+      SELECT 
+        e.MAT_EMPREGADO, 
+        e.NOME_EMPREGADO, 
+        t.NOME_TREINAMENTO, 
+        eht.STATUS_TREINAMENTO
+      FROM TB_EMPREGADO e
+      LEFT JOIN TB_EMPREGADO_has_TB_TREINAMENTO eht 
+        ON e.MAT_EMPREGADO = eht.TB_EMPREGADO_MAT_EMPREGADO
+      LEFT JOIN TB_TREINAMENTO t 
+        ON eht.TB_TREINAMENTO_ID_TREINAMENTO = t.ID_TREINAMENTO
+      WHERE 1=1`; // 1=1 facilita adições dinâmicas de condições
+
+    const params = [];
+
+    // Adiciona condição para termo (empregado)
+    if (termo) {
+      query += ' AND (e.MAT_EMPREGADO LIKE ? OR e.NOME_EMPREGADO LIKE ?)';
+      params.push(`%${termo}%`, `%${termo}%`);
+    }
+
+    // Adiciona condição para nome do treinamento
+    if (treinamento) {
+      query += ' AND t.NOME_TREINAMENTO LIKE ?';
+      params.push(`%${treinamento}%`);
+    }
+
+    // Adiciona condição para status do treinamento
+    if (status) {
+      query += ' AND eht.STATUS_TREINAMENTO = ?';
+      params.push(status);
+    }
+
+    const [results] = await db.query(query, params);
+
+    res.status(200).json(results);
+  } catch (error) {
+    console.error('Erro ao buscar empregados por treinamento:', error);
+    res.status(500).json({ error: 'Erro ao buscar empregados por treinamento.' });
+  }
+});
+
 // Rota para obter os treinamentos
 router.get('/treinamentos', async (req, res) => {
   try {
