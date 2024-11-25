@@ -229,6 +229,7 @@ const AtualizarEmpregado = () => {
                     <Form.Group className="mb-3" controlId={`treinamento${treinamento.ID_TREINAMENTO}`}>
                       <Form.Label className={style.label}>{treinamento.NOME_TREINAMENTO}</Form.Label>
                       <Form.Control
+                      className={style.select}
                         as="select"
                         value={treinamento.STATUS_TREINAMENTO}
                         onChange={(e) => handleTreinamentoChange(e, treinamento.ID_TREINAMENTO)}
@@ -241,9 +242,11 @@ const AtualizarEmpregado = () => {
                   </div>
                 ))}
 
-                <Button type="submit" className={style.btnEnviar}>
-                  Atualizar Empregado
+              <div className="d-flex justify-content-center mt-3">
+                <Button type="submit" variant="warning" className={`me-2 ${style.btn_cadastrar}`}>
+                  Atualizar
                 </Button>
+              </div>
               </Form>
             )}
           </div>
