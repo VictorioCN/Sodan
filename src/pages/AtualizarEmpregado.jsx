@@ -23,7 +23,6 @@ const AtualizarEmpregado = () => {
     treinamentos: [] // Estado para armazenar os treinamentos
   });
 
-  const [treinamentos, setTreinamentos] = useState([]);
   const [empregadoEncontrado, setEmpregadoEncontrado] = useState(false);
 
   // Função para buscar empregado
@@ -56,7 +55,7 @@ const AtualizarEmpregado = () => {
         dataAdmissao: dataAdmissaoFormatada, // Data formatada
         treinamentos: empregado.treinamentos ? empregado.treinamentos.map((treinamento) => ({
           ...treinamento,  // Preserva todas as informações
-          status: treinamento.status || ''  // Garante que o status é inicializado corretamente
+          STATUS_TREINAMENTO: treinamento.STATUS_TREINAMENTO || ''  // Corrige o nome do campo
         })) : [] // Garante que a lista de treinamentos não seja null ou undefined
       });
 
@@ -72,8 +71,22 @@ const AtualizarEmpregado = () => {
   const atualizarEmpregado = async (e) => {
     e.preventDefault();
 
+    // Valida se os treinamentos possuem um ID correto
+    const treinamentosAtualizados = formData.treinamentos.map((treinamento) => {
+      if (!treinamento.ID_TREINAMENTO) {
+        // Se o ID do treinamento for inválido, lança um erro
+        alert('ID do treinamento não pode ser nulo ou indefinido');
+        throw new Error('ID do treinamento não pode ser nulo ou indefinido');
+      }
+      return treinamento; // Retorna o treinamento com ID correto
+    });
+
     try {
-      const response = await axios.put(`http://localhost:5000/api/empregado/${formData.matricula}`, formData);
+      const response = await axios.put(`http://localhost:5000/api/empregado/${formData.matricula}`, {
+        ...formData,
+        treinamentos: treinamentosAtualizados // Envia os treinamentos com os dados completos
+      });
+
       alert('Empregado atualizado com sucesso!');
     } catch (error) {
       console.error(error);
@@ -92,33 +105,19 @@ const AtualizarEmpregado = () => {
 
   // Função para lidar com a mudança de status dos treinamentos
   const handleTreinamentoChange = (e, idTreinamento) => {
-    const status = e.target.value;
+    const STATUS_TREINAMENTO = e.target.value;
 
     // Atualiza o status do treinamento no array de treinamentos
     setFormData((prevState) => {
       const treinamentosAtualizados = prevState.treinamentos.map((treinamento) => {
         if (treinamento.ID_TREINAMENTO === idTreinamento) {
-          return { ...treinamento, status }; // Atualiza o status do treinamento específico
+          return { ...treinamento, STATUS_TREINAMENTO }; // Atualiza o status do treinamento específico
         }
         return treinamento;
       });
       return { ...prevState, treinamentos: treinamentosAtualizados };
     });
   };
-
-  // Carrega os treinamentos ao carregar o componente
-  useEffect(() => {
-    const fetchTreinamentos = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/empregado/treinamentos');
-        setTreinamentos(response.data);
-      } catch (error) {
-        console.error('Erro ao carregar treinamentos:', error);
-      }
-    };
-
-    fetchTreinamentos();
-  }, []);
 
   return (
     <div className={style.div}>
@@ -197,11 +196,11 @@ const AtualizarEmpregado = () => {
                       required
                     />
                   </Form.Group>
-                  <Form.Group controlId="formBasicNumero">
-                    <Form.Label className={style.label}>N°*</Form.Label>
+                  <Form.Group controlId="formBasicNumeroRua">
+                    <Form.Label className={style.label}>N° Rua*</Form.Label>
                     <Form.Control
                       className={style.input}
-                      type="text"
+                      type="number"
                       name="numeroRua"
                       value={formData.numeroRua}
                       onChange={handleInputChange}
@@ -210,115 +209,41 @@ const AtualizarEmpregado = () => {
                   </Form.Group>
                 </div>
 
-                <div className="d-flex justify-content-center mb-3">
-                  <Form.Group className="me-2" controlId="formBasicCidade">
-                    <Form.Label className={style.label}>Cidade*</Form.Label>
-                    <Form.Control
-                      className={style.input}
-                      type="text"
-                      name="cidade"
-                      value={formData.cidade}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </Form.Group>
-                  <Form.Group controlId="formBasicBairro">
-                    <Form.Label className={style.label}>Bairro*</Form.Label>
-                    <Form.Control
-                      className={style.input}
-                      type="text"
-                      name="bairro"
-                      value={formData.bairro}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </Form.Group>
-                </div>
-
-                <hr />
-                {/* Campos de contato */}
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label className={style.label}>Email*</Form.Label>
+                {/* Campo de Data de Nascimento */}
+                <Form.Group className="mb-3" controlId="formBasicNascimento">
+                  <Form.Label className={style.label}>Data de Nascimento*</Form.Label>
                   <Form.Control
                     className={style.inputInfo}
-                    type="email"
-                    name="email"
-                    value={formData.email}
+                    type="date"
+                    name="dataNascimento"
+                    value={formData.dataNascimento}
                     onChange={handleInputChange}
                     required
                   />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicTelefone">
-                  <Form.Label className={style.label}>Telefone*</Form.Label>
-                  <Form.Control
-                    className={style.inputInfo}
-                    type="text"
-                    name="telefone"
-                    value={formData.telefone}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </Form.Group>
-
-                {/* Campos de data de nascimento e admissão */}
-                <div className="d-flex justify-content-center mb-3">
-                  <Form.Group className="me-2" controlId="formBasicDataNascimento">
-                    <Form.Label className={style.label}>Data de Nascimento*</Form.Label>
-                    <Form.Control
-                      className={style.input}
-                      type="date"
-                      name="dataNascimento"
-                      value={formData.dataNascimento}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </Form.Group>
-                  <Form.Group controlId="formBasicDataAdmissao">
-                    <Form.Label className={style.label}>Data de Admissão*</Form.Label>
-                    <Form.Control
-                      className={style.input}
-                      type="date"
-                      name="dataAdmissao"
-                      value={formData.dataAdmissao}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </Form.Group>
-                </div>
-
-                {/* Seleção de treinamentos */}
-                <hr/>
-                <h1 className="text-center mb-3">Treinamentos</h1>
-                {treinamentos.map((treinamento) => {
-                  const empregadoTreinamento = formData.treinamentos.find(
-                    (item) => item.ID_TREINAMENTO === treinamento.ID_TREINAMENTO
-                  );
-
-                  return (
-                    <Form.Group key={treinamento.ID_TREINAMENTO} className="mb-3">
+                {/* Campos de Treinamentos */}
+                <h2 className="text-center mb-3">Treinamentos</h2>
+                {formData.treinamentos.map((treinamento) => (
+                  <div key={treinamento.ID_TREINAMENTO}>
+                    <Form.Group className="mb-3" controlId={`treinamento${treinamento.ID_TREINAMENTO}`}>
                       <Form.Label className={style.label}>{treinamento.NOME_TREINAMENTO}</Form.Label>
                       <Form.Control
-                      className={style.select}
                         as="select"
-                        value={empregadoTreinamento ? empregadoTreinamento.status : ''}
+                        value={treinamento.STATUS_TREINAMENTO}
                         onChange={(e) => handleTreinamentoChange(e, treinamento.ID_TREINAMENTO)}
                       >
-                        <option value="">Selecione o status</option>
-                        <option value="Concluído">Concluído</option>
-                        <option value="Em Andamento">Em Andamento</option>
                         <option value="Pendente">Pendente</option>
+                        <option value="Concluído">Concluído</option>
+                        <option value="Em andamento">Em Andamento</option>
                       </Form.Control>
                     </Form.Group>
-                  );
-                })}
+                  </div>
+                ))}
 
-                {/* Botão de atualização */}
-                <div className="d-flex justify-content-center mt-3">
-                  <Button variant="warning" type="submit" className={`me-2 ${style.btn_cadastrar}`}>
-                    Atualizar
-                  </Button>
-                </div>
+                <Button type="submit" className={style.btnEnviar}>
+                  Atualizar Empregado
+                </Button>
               </Form>
             )}
           </div>

@@ -67,6 +67,11 @@ router.get('/:matricula', async (req, res) => {
   const matricula = req.params.matricula;
 
   try {
+    // Verificar se a matrícula é válida
+    if (!matricula || matricula.trim() === '') {
+      return res.status(400).json({ message: 'Matrícula inválida.' });
+    }
+
     // Buscar o empregado
     const [empregado] = await db.query('SELECT * FROM TB_EMPREGADO WHERE MAT_EMPREGADO = ?', [matricula]);
 
@@ -78,7 +83,8 @@ router.get('/:matricula', async (req, res) => {
     const [treinamentos] = await db.query(`
       SELECT t.ID_TREINAMENTO, t.NOME_TREINAMENTO, eht.STATUS_TREINAMENTO
       FROM TB_TREINAMENTO t
-      JOIN TB_EMPREGADO_has_TB_TREINAMENTO eht ON eht.TB_TREINAMENTO_ID_TREINAMENTO = t.ID_TREINAMENTO
+      JOIN TB_EMPREGADO_has_TB_TREINAMENTO eht 
+        ON eht.TB_TREINAMENTO_ID_TREINAMENTO = t.ID_TREINAMENTO
       WHERE eht.TB_EMPREGADO_MAT_EMPREGADO = ?`, [matricula]);
 
     const empregadoComTreinamentos = { ...empregado[0], treinamentos };
@@ -89,15 +95,13 @@ router.get('/:matricula', async (req, res) => {
   }
 });
 
-// Rota para atualizar os dados do empregado
+// Rota para atualizar um empregado e seus treinamentos
 router.put('/:matricula', async (req, res) => {
   const matricula = req.params.matricula;
-  const {
-    nome, cpf, cidade, bairro, rua, numeroRua, email, telefone, dataNascimento, dataAdmissao, treinamentos
-  } = req.body;
+  const { nome, cpf, cidade, bairro, rua, numeroRua, email, telefone, dataNascimento, dataAdmissao, treinamentos } = req.body;
 
   try {
-    // Atualizar os dados do empregado
+    // Atualizando empregado
     const [result] = await db.query(`
       UPDATE TB_EMPREGADO
       SET NOME_EMPREGADO = ?, CPF_EMPREGADO = ?, CIDADE = ?, BAIRRO = ?, RUA = ?, NUM_RUA = ?, EMAIL_EMPREGADO = ?, TEL_EMPREGADO = ?, DT_NASCIMENTO = ?, DT_ADMISSAO = ?
@@ -105,38 +109,40 @@ router.put('/:matricula', async (req, res) => {
       nome, cpf, cidade, bairro, rua, numeroRua, email, telefone, dataNascimento, dataAdmissao, matricula
     ]);
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'Empregado não encontrado' });
-    }
+    console.log('Resultado da atualização do empregado:', result); // Para verificar se a atualização foi bem-sucedida
 
-    // Atualizar os treinamentos associados ao empregado
+    // Caso seja necessário obter os treinamentos antes de atualizar
+    console.log('Dados recebidos para atualização:', req.body);
+
     if (treinamentos && Array.isArray(treinamentos)) {
       for (const treinamento of treinamentos) {
-        const { idTreinamento, status } = treinamento;
+        const { ID_TREINAMENTO, STATUS_TREINAMENTO } = treinamento;  // Alinhar os nomes dos campos
+        console.log(`Atualizando treinamento ID: ${ID_TREINAMENTO}, Status: ${STATUS_TREINAMENTO} para empregado ${matricula}`);
+        
+        if (!ID_TREINAMENTO) {
+          throw new Error('ID do treinamento não pode ser nulo ou indefinido.');
+        }
 
-        // Verificar se o treinamento já está associado ao empregado
+        // Verificar se o treinamento já existe para o empregado
         const [treinamentoExistente] = await db.query(`
           SELECT * FROM TB_EMPREGADO_has_TB_TREINAMENTO
-          WHERE TB_EMPREGADO_MAT_EMPREGADO = ? AND TB_TREINAMENTO_ID_TREINAMENTO = ?`, [matricula, idTreinamento]);
+          WHERE TB_EMPREGADO_MAT_EMPREGADO = ? AND TB_TREINAMENTO_ID_TREINAMENTO = ?`, [matricula, ID_TREINAMENTO]);
 
-        // Se não existir, inserir um novo
         if (treinamentoExistente.length === 0) {
-          await db.query(`
-            INSERT INTO TB_EMPREGADO_has_TB_TREINAMENTO (TB_TREINAMENTO_ID_TREINAMENTO, TB_EMPREGADO_MAT_EMPREGADO, STATUS_TREINAMENTO)
-            VALUES (?, ?, ?)`, [idTreinamento, matricula, status]);
+          console.log(`Treinamento ID ${ID_TREINAMENTO} não encontrado. Nenhuma atualização necessária.`);
         } else {
-          // Caso contrário, atualizar o status
           await db.query(`
             UPDATE TB_EMPREGADO_has_TB_TREINAMENTO
             SET STATUS_TREINAMENTO = ?
-            WHERE TB_EMPREGADO_MAT_EMPREGADO = ? AND TB_TREINAMENTO_ID_TREINAMENTO = ?`, [status, matricula, idTreinamento]);
+            WHERE TB_EMPREGADO_MAT_EMPREGADO = ? AND TB_TREINAMENTO_ID_TREINAMENTO = ?`, [STATUS_TREINAMENTO, matricula, ID_TREINAMENTO]);
         }
       }
     }
 
-    res.status(200).json({ message: 'Empregado atualizado com sucesso!' });
+    // Se tudo ocorrer bem, retorna sucesso
+    res.status(200).json({ message: 'Empregado e treinamentos atualizados com sucesso!' });
   } catch (error) {
-    console.error('Erro ao atualizar empregado:', error);
+    console.error('Erro interno ao atualizar empregado:', error.message); // Log detalhado de erro
     res.status(500).json({ message: 'Erro ao atualizar empregado', error: error.message });
   }
 });
