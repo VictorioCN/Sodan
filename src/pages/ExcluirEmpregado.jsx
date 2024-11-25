@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
 import { FaSearch } from 'react-icons/fa';
 import axios from 'axios';
 import style from '../css/Empregado.module.css';
@@ -11,6 +12,8 @@ const ExcluirEmpregado = () => {
   const [empregado, setEmpregado] = useState(null);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const formatDate = (date) => {
     if (!date) return '';
@@ -18,7 +21,6 @@ const ExcluirEmpregado = () => {
     return d.toISOString().split('T')[0]; // Formato "YYYY-MM-DD"
   };
 
-  // Função para buscar o empregado
   const buscarEmpregado = async () => {
     if (!matriculaBusca) {
       alert('Por favor, insira o número da matrícula');
@@ -27,11 +29,11 @@ const ExcluirEmpregado = () => {
 
     setLoading(true);
     setErrorMessage('');
-    
+
     try {
       const response = await axios.get(`http://localhost:5000/api/empregado/${matriculaBusca}`);
       const empregado = response.data;
-      setEmpregado(empregado);  // Atualiza o estado com os dados do empregado
+      setEmpregado(empregado);
       alert('Empregado encontrado!');
     } catch (error) {
       console.error(error);
@@ -42,30 +44,17 @@ const ExcluirEmpregado = () => {
     }
   };
 
-  // Função para excluir o empregado com confirmação
   const excluirEmpregado = async () => {
-    if (!empregado) {
-      alert('Nenhum empregado encontrado para exclusão');
-      return;
-    }
-
-    // Pop-up de confirmação antes de excluir
-    const confirmarExclusao = window.confirm('Tem certeza de que deseja excluir este empregado?');
-
-    if (!confirmarExclusao) {
-      // Se o usuário cancelar a exclusão
-      return;
-    }
-
+    setShowConfirmModal(false); // Fecha o modal de confirmação
     setLoading(true);
     setErrorMessage('');
 
     try {
       const response = await axios.delete(`http://localhost:5000/api/empregado/empregado/${empregado.MAT_EMPREGADO}`);
       if (response.status === 200) {
-        alert('Empregado excluído com sucesso!');
-        setEmpregado(null);  // Limpa o estado após a exclusão
-        setMatriculaBusca('');  // Limpa a matrícula de busca
+        setEmpregado(null);
+        setMatriculaBusca('');
+        setShowSuccessModal(true); // Abre o modal de sucesso
       }
     } catch (error) {
       console.error(error);
@@ -79,7 +68,6 @@ const ExcluirEmpregado = () => {
   return (
     <div className={style.div}>
       <Container className={style.container}>
-        {/* Campo de busca */}
         <div className="d-flex justify-content-center mb-4">
           <Form className="d-flex">
             <Form.Control
@@ -102,10 +90,8 @@ const ExcluirEmpregado = () => {
           </Form>
         </div>
 
-        {/* Mensagem de erro */}
         {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
 
-        {/* Formulário de exclusão */}
         {empregado && (
           <div>
             <h1 className="text-center">Exclusão do Empregado</h1>
@@ -140,8 +126,7 @@ const ExcluirEmpregado = () => {
                 />
               </Form.Group>
 
-              {/* Campos "Cidade" e "Bairro" lado a lado */}
-              <hr/>
+              <hr />
               <div className="d-flex justify-content-between mb-3">
                 <Form.Group className="me-2" controlId="formBasicCidade">
                   <Form.Label className={style.label}>Cidade*</Form.Label>
@@ -164,7 +149,6 @@ const ExcluirEmpregado = () => {
                 </Form.Group>
               </div>
 
-              {/* Campos "Rua" e "Número da Rua" lado a lado */}
               <div className="d-flex justify-content-between mb-3">
                 <Form.Group className="me-2" controlId="formBasicRua">
                   <Form.Label className={style.label}>Rua*</Form.Label>
@@ -186,8 +170,8 @@ const ExcluirEmpregado = () => {
                   />
                 </Form.Group>
               </div>
-
               <hr/>
+
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label className={style.label}>Email*</Form.Label>
                 <Form.Control
@@ -208,7 +192,6 @@ const ExcluirEmpregado = () => {
                 />
               </Form.Group>
 
-              {/* Campos "Data de Nascimento" e "Data de Admissão" lado a lado */}
               <div className="d-flex justify-content-between mb-3">
                 <Form.Group className="me-2" controlId="formBasicDataNascimento">
                   <Form.Label className={style.label}>Data de Nascimento*</Form.Label>
@@ -232,9 +215,9 @@ const ExcluirEmpregado = () => {
               </div>
 
               <div className="d-flex justify-content-center mt-3">
-                <Button 
-                  variant="danger" 
-                  onClick={excluirEmpregado} 
+                <Button
+                  variant="danger"
+                  onClick={() => setShowConfirmModal(true)}
                   className={`me-2 ${style.btn_cadastrar}`}
                   disabled={loading}
                 >
@@ -244,10 +227,38 @@ const ExcluirEmpregado = () => {
             </Form>
           </div>
         )}
+
+        {/* Modal de Confirmação */}
+        <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirmar Exclusão</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Tem certeza de que deseja excluir este empregado?</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
+              Cancelar
+            </Button>
+            <Button variant="danger" onClick={excluirEmpregado}>
+              Confirmar
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        {/* Modal de Sucesso */}
+        <Modal show={showSuccessModal} onHide={() => setShowSuccessModal(false)} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Sucesso</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Empregado excluído com sucesso!</Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={() => setShowSuccessModal(false)}>
+              Fechar
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Container>
     </div>
   );
 };
 
 export default ExcluirEmpregado;
-
