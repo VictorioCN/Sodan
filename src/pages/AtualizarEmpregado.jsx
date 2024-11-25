@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { FaSearch } from 'react-icons/fa';
 import axios from 'axios';
 import style from '../css/Empregado.module.css';
 import Container from 'react-bootstrap/esm/Container';
+import Modal from 'react-bootstrap/Modal';
 
 const AtualizarEmpregado = () => {
   const [matriculaBusca, setMatriculaBusca] = useState('');
@@ -24,6 +25,10 @@ const AtualizarEmpregado = () => {
   });
 
   const [empregadoEncontrado, setEmpregadoEncontrado] = useState(false);
+
+  // Estado para controlar os modais
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   // Função para buscar empregado
   const buscarEmpregado = async () => {
@@ -60,7 +65,6 @@ const AtualizarEmpregado = () => {
       });
 
       setEmpregadoEncontrado(true);
-      alert('Empregado encontrado!');
     } catch (error) {
       console.error(error);
       alert('Erro ao buscar empregado. Verifique a matrícula ou tente novamente.');
@@ -81,17 +85,46 @@ const AtualizarEmpregado = () => {
       return treinamento; // Retorna o treinamento com ID correto
     });
 
+    // Exibe o modal de confirmação
+    setShowConfirmModal(true);
+  };
+
+  // Função para confirmar a atualização (chamada quando o modal de confirmação for aceito)
+  const handleConfirmarAtualizacao = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/empregado/${formData.matricula}`, {
+      await axios.put(`http://localhost:5000/api/empregado/${formData.matricula}`, {
         ...formData,
-        treinamentos: treinamentosAtualizados // Envia os treinamentos com os dados completos
+        treinamentos: formData.treinamentos // Envia os treinamentos com os dados completos
       });
 
-      alert('Empregado atualizado com sucesso!');
+      setShowConfirmModal(false); // Fecha o modal de confirmação
+      setShowSuccessModal(true); // Exibe o modal de sucesso
+
+      // Limpar o formulário após a atualização
+      setFormData({
+        matricula: '',
+        nome: '',
+        cpf: '',
+        cidade: '',
+        bairro: '',
+        rua: '',
+        numeroRua: '',
+        email: '',
+        telefone: '',
+        dataNascimento: '',
+        dataAdmissao: '',
+        treinamentos: [] // Limpa os treinamentos
+      });
+      setEmpregadoEncontrado(false); // Limpa o estado de empregado encontrado
     } catch (error) {
       console.error(error);
       alert('Erro ao atualizar empregado.');
     }
+  };
+
+  // Função para cancelar a atualização
+  const handleCancelarAtualizacao = () => {
+    setShowConfirmModal(false); // Fecha o modal de confirmação sem realizar a atualização
   };
 
   // Atualiza o valor dos campos no formulário
@@ -229,7 +262,7 @@ const AtualizarEmpregado = () => {
                     <Form.Group className="mb-3" controlId={`treinamento${treinamento.ID_TREINAMENTO}`}>
                       <Form.Label className={style.label}>{treinamento.NOME_TREINAMENTO}</Form.Label>
                       <Form.Control
-                      className={style.select}
+                        className={style.select}
                         as="select"
                         value={treinamento.STATUS_TREINAMENTO}
                         onChange={(e) => handleTreinamentoChange(e, treinamento.ID_TREINAMENTO)}
@@ -242,15 +275,44 @@ const AtualizarEmpregado = () => {
                   </div>
                 ))}
 
-              <div className="d-flex justify-content-center mt-3">
-                <Button type="submit" variant="warning" className={`me-2 ${style.btn_cadastrar}`}>
-                  Atualizar
-                </Button>
-              </div>
+                <div className="d-flex justify-content-center mt-3">
+                  <Button type="submit" variant="warning" className={`me-2 ${style.btn_cadastrar}`}>
+                    Atualizar
+                  </Button>
+                </div>
               </Form>
             )}
           </div>
         </Container>
+
+        {/* Modal de Confirmação */}
+        <Modal show={showConfirmModal} onHide={handleCancelarAtualizacao}>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirmar Atualização</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Você tem certeza que deseja atualizar os dados do empregado?</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCancelarAtualizacao}>
+              Cancelar
+            </Button>
+            <Button variant="primary" onClick={handleConfirmarAtualizacao}>
+              Confirmar
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        {/* Modal de Sucesso */}
+        <Modal show={showSuccessModal} onHide={() => setShowSuccessModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Sucesso!</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Empregado atualizado com sucesso!</Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={() => setShowSuccessModal(false)}>
+              Fechar
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Container>
     </div>
   );
